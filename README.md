@@ -1,117 +1,85 @@
-# 📚 Library Management System (MySQL)
+📚 My_Library SQL Database
+Description
+My_Library is a comprehensive SQL-based database system designed to manage books, authors, publishers, customers, addresses, and order processing in a virtual library environment. It supports multi-author books, multi-address customers, and detailed order tracking with delivery methods and statuses.
 
-This is a relational database system designed to manage books, authors, publishers, customers, and their related activities in a library.
+🏗️ Schema Overview
+Core Entities:
 
-## 🛠 Technologies Used
+author: Stores author details.
 
-- **MySQL** – Open-source relational database
-- **MySQL Workbench** – For database modeling and queries
-- **SQL** – To structure, populate, and interact with data
+publisher: Information about publishers.
 
----
+book_language: Stores supported languages.
 
-## 🧱 Database Schema Overview
+book: Main book entity linked to author, language, and publisher.
 
-### 📘 `book`
-Stores information about books in the library.
+book_author: Handles many-to-many relation between books and authors.
 
-| Field         | Type         | Description                    |
-|---------------|--------------|--------------------------------|
-| `id`          | INT (PK)     | Unique book ID (auto-increment) |
-| `title`       | VARCHAR(255) | Book title                     |
-| `publisher_id`| INT (FK)     | Linked to `publisher(id)`      |
-| `language_id` | INT (FK)     | Linked to `book_language(id)`  |
+customer: Library customers.
 
----
+address: Physical addresses linked to customers.
 
-### ✍️ `author`
-Stores details of book authors.
+address_status: Status of each customer address (active, temporary, etc.).
 
-| Field   | Type         | Description           |
-|---------|--------------|-----------------------|
-| `id`    | INT (PK)     | Author ID (auto-increment) |
-| `name`  | VARCHAR(255) | Author's full name     |
+country: Country list for address referencing.
 
----
+Order Management Entities:
 
-### 📖 `book_author`
-Manages many-to-many relationships between books and authors.
+cust_order: Customer order table with delivery method and status.
 
-| Field       | Type | Description              |
-|-------------|------|--------------------------|
-| `book_id`   | INT  | References `book(id)`    |
-| `author_id` | INT  | References `author(id)`  |
+order_line: Links books to specific orders (includes quantity).
 
----
+shipping_method: Delivery types (e.g., express, pickup, drone).
 
-### 🏢 `publisher`
-Stores publishing companies.
+order_status: Tracks the life cycle of an order.
 
-| Field   | Type         | Description           |
-|---------|--------------|-----------------------|
-| `id`    | INT (PK)     | Publisher ID (auto-increment) |
-| `name`  | VARCHAR(255) | Publisher name         |
+order_history: Historical log of status changes for orders.
 
----
+🔗 Relationships
+Each book may have multiple authors (book_author).
 
-### 🌐 `book_language`
-Lists languages available in the library.
+A book is linked to one publisher, one author, and one language.
 
-| Field          | Type          | Description           |
-|----------------|---------------|-----------------------|
-| `id`           | INT (PK)      | Language ID (auto-increment) |
-| `language_name`| VARCHAR(100)  | Name of the language  |
+A customer can have multiple addresses with different statuses.
 
----
+Each order contains one customer, shipping method, and status.
 
-### 🧑 `customer`
-Information about registered library users.
+Orders can have multiple books (order_line).
 
-| Field   | Type         | Description           |
-|---------|--------------|-----------------------|
-| `id`    | INT (PK)     | Customer ID (auto-increment) |
-| `name`  | VARCHAR(255) | Full name              |
-| `email` | VARCHAR(255) | Unique email address   |
+order_history logs every status change over time.
 
----
+🛠️ Features
+Normalization: All data is well normalized to reduce redundancy.
 
-### 🏠 `customer_address`
-Maps customers to their address records and status.
+Foreign Key Integrity: Ensures valid references between related tables.
 
-| Field             | Type | Description                        |
-|-------------------|------|------------------------------------|
-| `customer_id`     | INT  | References `customer(id)`          |
-| `address_id`      | INT  | References `address(id)` (assumed) |
-| `address_status_id` | INT | References `address_status(id)` (assumed) |
+Many-to-Many & One-to-Many Support: Author-book, customer-address, etc.
 
----
+Order Tracking: From placement to delivery or cancellation.
 
-## 📌 Features
+Flexible Shipping & Address Status Management.
 
-- Manage books, authors, and publishers
-- Track multiple authors per book
-- Organize books by language
-- Register customers and assign addresses
-- Scalable for future features (borrowing, returns, reviews, etc.)
+📥 Sample Data
+The database is seeded with:
 
----
+18+ authors
 
-## 🚀 How to Use
+20 books
 
-1. Clone the project or open it in MySQL Workbench.
-2. Run the SQL scripts to create and populate the database.
-3. Start writing queries or build an interface on top (e.g., Flask, Django, PHP).
+10 customers
 
----
+Multiple order histories and shipping methods
 
-## 🔮 Future Additions (Optional)
+Diverse international addresses
 
-- Book lending & returns
-- Customer borrowing history
-- Book availability status
-- Fine tracking
-- Search functionality
+✅ Requirements
+MySQL 8.x
 
----
+MySQL Workbench (recommended for visualization and running queries)
+
+📌 Notes
+The system currently does not include user authentication or front-end integration — it’s database-only.
+
+The cust_order table references the order_status and shipping_method tables to manage logistics.
 
 
